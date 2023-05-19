@@ -37,7 +37,7 @@
             btnIns = new Button();
             btnAlt = new Button();
             btnDel = new Button();
-            button2 = new Button();
+            btnLoc = new Button();
             gv = new DataGridView();
             lblData = new Label();
             ((System.ComponentModel.ISupportInitialize)gv).BeginInit();
@@ -121,14 +121,14 @@
             btnDel.UseVisualStyleBackColor = true;
             btnDel.Click += btnDel_Click;
             // 
-            // button2
+            // btnLoc
             // 
-            button2.Location = new Point(703, 64);
-            button2.Name = "button2";
-            button2.Size = new Size(85, 23);
-            button2.TabIndex = 9;
-            button2.Text = "LOCALIZAR";
-            button2.UseVisualStyleBackColor = true;
+            btnLoc.Location = new Point(703, 64);
+            btnLoc.Name = "btnLoc";
+            btnLoc.Size = new Size(85, 23);
+            btnLoc.TabIndex = 9;
+            btnLoc.Text = "LOCALIZAR";
+            btnLoc.UseVisualStyleBackColor = true;
             // 
             // gv
             // 
@@ -155,7 +155,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(lblData);
             Controls.Add(gv);
-            Controls.Add(button2);
+            Controls.Add(btnLoc);
             Controls.Add(btnDel);
             Controls.Add(btnAlt);
             Controls.Add(btnIns);
@@ -184,7 +184,7 @@
         private Button btnIns;
         private Button btnAlt;
         private Button btnDel;
-        private Button button2;
+        private Button btnLoc;
         private DataGridView gv;
         private Label lblData;
     }

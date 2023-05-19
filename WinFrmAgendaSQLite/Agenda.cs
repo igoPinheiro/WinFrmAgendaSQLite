@@ -10,28 +10,19 @@ public partial class Agenda : Form
 
     private void Agenda_Load(object sender, EventArgs e)
     {
-        //DAOAgenda.path
-        DAOAgenda.CreateBancoSQLite();
-        DAOAgenda.CreateTableSQLite();
-
-        ShowData();
-
-        lblData.Text = DAOAgenda.path;
-
-    }
-
-    private void ShowData()
-    {
         try
         {
-            DataTable dt = new DataTable();
-            dt = DAOAgenda.GetContacts();
-            gv.DataSource = dt;
+            DAOAgenda.CreateBancoSQLite();
+            DAOAgenda.CreateTableSQLite();
+
+            ShowData();
+
+            lblData.Text = DAOAgenda.path;
         }
         catch (Exception ex)
         {
-
-            MessageBox.Show("ERROR:" + ex.Message);
+            btnAlt.Enabled = btnDel.Enabled = btnIns.Enabled = btnLoc.Enabled = false;
+            ShowErrorMsg(ex);
         }
     }
 
@@ -39,23 +30,15 @@ public partial class Agenda : Form
     {
         try
         {
-            Contact c = new Contact();
-            c.Id = Convert.ToInt32(txtID.Text);
-            c.Name = txtName.Text;
-            c.Email = txtEmail.Text;
-
-            DAOAgenda.Add(c);
+            DAOAgenda.Add(new Contact(Convert.ToInt32(txtID.Text), txtName.Text, txtEmail.Text));
 
             ShowData();
 
-            txtEmail.Clear();
-            txtID.Clear();
-            txtName.Clear();
+            ClearForm();
         }
         catch (Exception ex)
         {
-
-            MessageBox.Show("ERROR:" + ex.Message);
+            ShowErrorMsg(ex);
         }
     }
 
@@ -63,23 +46,15 @@ public partial class Agenda : Form
     {
         try
         {
-            Contact c = new Contact();
-            c.Id = Convert.ToInt32(txtID.Text);
-            c.Name = txtName.Text;
-            c.Email = txtEmail.Text;
-
-            DAOAgenda.Update(c);
+            DAOAgenda.Update(new Contact(Convert.ToInt32(txtID.Text), txtName.Text, txtEmail.Text));
 
             ShowData();
 
-            txtEmail.Clear();
-            txtID.Clear();
-            txtName.Clear();
+            ClearForm();
         }
         catch (Exception ex)
         {
-
-            MessageBox.Show("ERROR:" + ex.Message);
+            ShowErrorMsg(ex);
         }
     }
 
@@ -95,19 +70,43 @@ public partial class Agenda : Form
                     continue;
 
                 DAOAgenda.Delete(Convert.ToInt32(id));
-                
+
             }
 
             ShowData();
 
-            txtEmail.Clear();
-            txtID.Clear();
-            txtName.Clear();
+            ClearForm();
         }
         catch (Exception ex)
         {
 
             MessageBox.Show("ERROR:" + ex.Message);
         }
+    }
+
+    private void ClearForm()
+    {
+        txtEmail.Clear();
+        txtID.Clear();
+        txtName.Clear();
+    }
+
+    private void ShowData()
+    {
+        try
+        {
+            DataTable dt = new DataTable();
+            dt = DAOAgenda.GetContacts();
+            gv.DataSource = dt;
+        }
+        catch (Exception ex)
+        {
+            ShowErrorMsg(ex);
+        }
+    }
+
+    private void ShowErrorMsg(Exception ex)
+    {
+        MessageBox.Show("ERROR:" + ex.Message);
     }
 }
