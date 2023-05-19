@@ -30,7 +30,15 @@ public partial class Agenda : Form
     {
         try
         {
-            DAOAgenda.Add(new Contact(Convert.ToInt32(txtID.Text), txtName.Text, txtEmail.Text));
+            var model = new Contact(GetIDValue(), txtName.Text, txtEmail.Text);
+
+            model.Validate();
+
+            var r = DAOAgenda.GetContact(model.Id ?? throw new Exception("Id Não identificado!"));
+
+            if (r?.Rows?.Count > 0) throw new Exception($"Já existe um registro com ID {model.Id}");
+
+            DAOAgenda.Add(model);
 
             ShowData();
 
@@ -46,7 +54,11 @@ public partial class Agenda : Form
     {
         try
         {
-            DAOAgenda.Update(new Contact(Convert.ToInt32(txtID.Text), txtName.Text, txtEmail.Text));
+            var model = new Contact(GetIDValue(), txtName.Text, txtEmail.Text);
+
+            model.Validate();
+
+            DAOAgenda.Update(model);
 
             ShowData();
 
@@ -62,20 +74,24 @@ public partial class Agenda : Form
     {
         try
         {
-            foreach (DataGridViewCell row in gv.SelectedCells)
+            if (gv.SelectedCells.Count > 0)
             {
-                var id = gv["id", row.RowIndex]?.Value?.ToString();
+                int rowindex = gv.SelectedCells[0].RowIndex;
 
-                if (string.IsNullOrEmpty(id))
-                    continue;
+                var id = gv["id", rowindex]?.Value?.ToString();
 
-                DAOAgenda.Delete(Convert.ToInt32(id));
+                if (!string.IsNullOrEmpty(id))
+                {
+                    if (MessageBox.Show($"Tem certeza que você quer excluir o contato ID [{id}]?", "Confirmar Exclusão", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        DAOAgenda.Delete(Convert.ToInt32(id));
 
+                        ShowData();
+
+                        ClearForm();
+                    }
+                }
             }
-
-            ShowData();
-
-            ClearForm();
         }
         catch (Exception ex)
         {
@@ -109,4 +125,34 @@ public partial class Agenda : Form
     {
         MessageBox.Show("ERROR:" + ex.Message);
     }
+
+    private void txtID_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        //Permiti somente digitos
+        e.Handled = !char.IsDigit(e.KeyChar) && !char.IsControl(e.KeyChar);
+    }
+
+    private void btnClear_Click(object sender, EventArgs e)
+    {
+        ClearForm();
+    }
+
+    private void gv_CellClick(object sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex < 0)
+            return;
+
+        txtID.Text = gv[nameof(Contact.Id), e.RowIndex]?.Value?.ToString();
+        txtName.Text = gv[nameof(Contact.Name), e.RowIndex]?.Value?.ToString();
+        txtEmail.Text = gv[nameof(Contact.Email), e.RowIndex]?.Value?.ToString();
+    }
+
+    private int? GetIDValue()
+    {
+        if (string.IsNullOrEmpty(txtID.Text?.Trim()))
+            return null;
+
+        return Convert.ToInt32(txtID.Text.Trim());
+    }
+
 }

@@ -40,6 +40,7 @@
             btnLoc = new Button();
             gv = new DataGridView();
             lblData = new Label();
+            btnClear = new Button();
             ((System.ComponentModel.ISupportInitialize)gv).BeginInit();
             SuspendLayout();
             // 
@@ -49,6 +50,7 @@
             txtID.Name = "txtID";
             txtID.Size = new Size(100, 23);
             txtID.TabIndex = 0;
+            txtID.KeyPress += txtID_KeyPress;
             // 
             // lblId
             // 
@@ -93,7 +95,7 @@
             // 
             // btnIns
             // 
-            btnIns.Location = new Point(430, 64);
+            btnIns.Location = new Point(14, 64);
             btnIns.Name = "btnIns";
             btnIns.Size = new Size(85, 23);
             btnIns.TabIndex = 6;
@@ -103,7 +105,7 @@
             // 
             // btnAlt
             // 
-            btnAlt.Location = new Point(612, 64);
+            btnAlt.Location = new Point(105, 64);
             btnAlt.Name = "btnAlt";
             btnAlt.Size = new Size(85, 23);
             btnAlt.TabIndex = 7;
@@ -113,7 +115,7 @@
             // 
             // btnDel
             // 
-            btnDel.Location = new Point(521, 64);
+            btnDel.Location = new Point(196, 64);
             btnDel.Name = "btnDel";
             btnDel.Size = new Size(85, 23);
             btnDel.TabIndex = 8;
@@ -123,21 +125,29 @@
             // 
             // btnLoc
             // 
-            btnLoc.Location = new Point(703, 64);
+            btnLoc.Location = new Point(378, 64);
             btnLoc.Name = "btnLoc";
             btnLoc.Size = new Size(85, 23);
             btnLoc.TabIndex = 9;
             btnLoc.Text = "LOCALIZAR";
             btnLoc.UseVisualStyleBackColor = true;
+            btnLoc.Visible = false;
             // 
             // gv
             // 
+            gv.AllowUserToAddRows = false;
+            gv.AllowUserToDeleteRows = false;
+            gv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            gv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             gv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             gv.Location = new Point(12, 93);
+            gv.MultiSelect = false;
             gv.Name = "gv";
+            gv.ReadOnly = true;
             gv.RowTemplate.Height = 25;
             gv.Size = new Size(776, 315);
             gv.TabIndex = 10;
+            gv.CellClick += gv_CellClick;
             // 
             // lblData
             // 
@@ -148,11 +158,22 @@
             lblData.TabIndex = 11;
             lblData.Text = "Localizar onde os dados estão armazenados";
             // 
+            // btnClear
+            // 
+            btnClear.Location = new Point(287, 64);
+            btnClear.Name = "btnClear";
+            btnClear.Size = new Size(85, 23);
+            btnClear.TabIndex = 12;
+            btnClear.Text = "LIMPAR";
+            btnClear.UseVisualStyleBackColor = true;
+            btnClear.Click += btnClear_Click;
+            // 
             // Agenda
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(799, 451);
+            Controls.Add(btnClear);
             Controls.Add(lblData);
             Controls.Add(gv);
             Controls.Add(btnLoc);
@@ -165,8 +186,12 @@
             Controls.Add(txtName);
             Controls.Add(lblId);
             Controls.Add(txtID);
+            MaximizeBox = false;
+            MaximumSize = new Size(815, 490);
+            MinimumSize = new Size(815, 490);
             Name = "Agenda";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Agenda";
             Load += Agenda_Load;
             ((System.ComponentModel.ISupportInitialize)gv).EndInit();
             ResumeLayout(false);
@@ -187,5 +212,6 @@
         private Button btnLoc;
         private DataGridView gv;
         private Label lblData;
+        private Button btnClear;
     }
 }
